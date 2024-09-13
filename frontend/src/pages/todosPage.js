@@ -74,7 +74,9 @@ export const todosPage = () => {
   table.appendChild(tbody);
 
   container.appendChild(btnHome);
-  fetch("http://localhost:4000/todos")
+  fetch("http://localhost:4000/todos",{
+    credentials: "include"
+  })
     .then((response) => response.json())
     .then((data) => {
       data.todos.forEach((todo) => {
@@ -98,10 +100,45 @@ export const todosPage = () => {
         td4.classList.add("border", "px-4", "py-2");
         td4.textContent = todo.owner;
 
+        const td5 = document.createElement("button");
+        td5.classList.add("bg-blue-500","hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded","flex", "items-center",);
+        td5.textContent = "Borrar";
+        td5.addEventListener('click', () => {
+          // Realiza la solicitud DELETE con fetch
+          fetch(`http://localhost:4000/todos/${todo.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+            
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error en la solicitud: ' + response.statusText);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Éxito:', data);
+            alert('Recurso eliminado exitosamente');
+          })
+          .catch(error => {
+            console.error('Hubo un problema con la solicitud:', error);
+            alert('Error al eliminar el recurso');
+          }).then(()=>{
+            window.location.reload()
+          })
+        });
+        const td6 = document.createElement("button");
+        td6.classList.add("bg-blue-500","hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded","my-2","flex", "items-center");
+        td6.textContent = "Editar";
+
         tr.appendChild(td1);
         tr.appendChild(td2);
         tr.appendChild(td3);
         tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
         tbody.appendChild(tr);
       });
     });
