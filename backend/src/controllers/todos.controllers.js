@@ -17,11 +17,31 @@ export const deleteTodo = (req,res)=>{
   })
 }
 
-// export const crearTodo = (req,res)=>{
-//   const {id, title, completed} = req.body;
+export const createTodo = (req, res) => {
+  const { title, completed } = req.body;
+  const newTodo = {
+    id: database.todos.length + 1,
+    title,
+    completed: completed || false,
+    owner: req.user.id
+  };
+  
+  database.todos.push(newTodo);
+  res.status(201).json(newTodo);
+};
 
-//   const newTodo = db.push({id: id, title: title, completed:completed})
-//   res.json({
-//     msg:"Todo agregado correctamente"
-//   })
-// }
+export const editTodo = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { title, completed } = req.body;
+
+  const indexTask = database.todos.findIndex(task => task.id === id && task.owner === req.user.id);
+
+  if (indexTask === -1) {
+    return res.status(404).json({ msg: 'Tarea no encontrada' });
+  }
+
+  if (title) database.todos[indexTask].title = title;
+  if (completed !== undefined) database.todos[indexTask].completed = completed;
+
+  return res.status(200).json({ msg: 'Tarea actualizada' });
+};
