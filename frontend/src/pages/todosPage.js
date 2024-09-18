@@ -27,16 +27,14 @@ export const todosPage = () => {
   title.classList.add("text-3xl", "font-bold", "mb-4");
   title.textContent = "List of Todos";
 
-  // Crear el formulario
   const form = document.createElement("form");
   form.classList.add("mb-4");
   form.addEventListener("submit", (event) => {
-    event.preventDefault(); // Evitar el envío normal del formulario
+    event.preventDefault();
 
     const titleInput = document.getElementById("todoTitle").value;
     const completedInput = document.getElementById("todoCompleted").checked;
 
-    // Enviar el nuevo todo a la API
     fetch("http://localhost:4000/todos", {
       method: "POST",
       headers: {
@@ -54,7 +52,7 @@ export const todosPage = () => {
     .then((data) => {
       console.log("Todo creado:", data);
       alert("Todo creado exitosamente");
-      window.location.reload(); // Recargar la página para mostrar el nuevo todo
+      window.location.reload();
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -81,7 +79,6 @@ export const todosPage = () => {
   submitButton.textContent = "Agregar Todo";
   submitButton.classList.add("bg-blue-500", "text-white", "p-2", "rounded");
 
-  // Añadir elementos al formulario
   form.appendChild(titleInput);
   form.appendChild(completedInput);
   form.appendChild(completedLabel);
@@ -127,10 +124,9 @@ export const todosPage = () => {
 
   container.appendChild(btnHome);
   container.appendChild(title);
-  container.appendChild(form); // Añadir el formulario al contenedor
+  container.appendChild(form);
   container.appendChild(table);
 
-  // Modal para editar
   const modal = document.createElement("div");
   modal.classList.add("fixed", "inset-0", "bg-black", "bg-opacity-50", "hidden", "justify-center", "items-center");
   
@@ -156,7 +152,6 @@ export const todosPage = () => {
   modalSubmitButton.textContent = "Guardar Cambios";
   modalSubmitButton.classList.add("bg-blue-500", "text-white", "p-2", "rounded");
 
-  // Añadir elementos al modal
   modalContent.appendChild(modalTitleInput);
   modalContent.appendChild(modalCompletedInput);
   modalContent.appendChild(modalCompletedLabel);
@@ -164,7 +159,6 @@ export const todosPage = () => {
   modal.appendChild(modalContent);
   container.appendChild(modal);
 
-  // Funcionalidad para abrir el modal
   const openModal = (todo) => {
     modalTitleInput.value = todo.title;
     modalCompletedInput.checked = todo.completed;
@@ -191,7 +185,7 @@ export const todosPage = () => {
       })
       .then(() => {
         alert('Todo actualizado exitosamente');
-        window.location.reload(); // Recargar la página para mostrar los cambios
+        window.location.reload();
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -243,7 +237,7 @@ export const todosPage = () => {
         .then(data => {
           console.log('Éxito:', data);
           alert('Recurso eliminado exitosamente');
-          window.location.reload(); // Recargar la página para actualizar la lista
+          window.location.reload()
         })
         .catch(error => {
           console.error('Hubo un problema con la solicitud:', error);
@@ -254,7 +248,7 @@ export const todosPage = () => {
       const td6 = document.createElement("button");
       td6.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded", "my-2", "flex", "items-center");
       td6.textContent = "Editar";
-      td6.addEventListener('click', () => openModal(todo)); // Abrir modal al hacer clic
+      td6.addEventListener('click', () => openModal(todo));
 
       tr.appendChild(td1);
       tr.appendChild(td2);
@@ -266,7 +260,6 @@ export const todosPage = () => {
     });
   });
 
-  // Cerrar modal al hacer clic fuera de él
   modal.addEventListener('click', (event) => {
     if (event.target === modal) {
       modal.classList.add("hidden");
